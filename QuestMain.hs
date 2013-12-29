@@ -44,13 +44,13 @@ evalAction :: Action -> String
 evalAction act = "Action: " ++ show act ++ "!"
 
 -- Returns list head or default value if list is empty
-switchDefault :: [a] -> a -> a
-switchDefault [] def = def
-switchDefault (x:_) _ = x
+headDefault :: [a] -> a -> a
+headDefault [] def = def
+headDefault (x:_) _ = x
 
 -- Reads value from string, returns defValue if read fails
 readDefault :: Read a => String -> a -> a
-readDefault str defValue = switchDefault (maybeToList(readMaybe str)) defValue
+readDefault str defValue = headDefault ( maybeToList ( readMaybe str) ) defValue
 
 convertStringToAction :: String -> Action
 convertStringToAction str = readDefault str Look

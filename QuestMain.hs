@@ -40,30 +40,24 @@ enumerateObjects :: [Object] -> String
 enumerateObjects [] = ""
 enumerateObjects objects = "\n  There are some objects here: " ++ show objects
 
--- Обрабатываем действие.
 evalAction :: Action -> String
 evalAction act = "Action: " ++ show act ++ "!"
 
-what' :: [Action] -> Action
-what' [] = Look
-what' (x:_) = x
-
+-- Returns list head or default value if list is empty
 switchDefault :: [a] -> a -> a
 switchDefault [] def = def
 switchDefault (x:_) _ = x
 
-getList :: Read a => String -> [a]
-getList str = maybeToList(readMaybe str)
-
---readDefault :: String -> a -> a
---readDefault str defValue = switchDefault maybeToList(readMaybe str) defValue
-readDefault str defValue = switchDefault (getList str) defValue
---readDefault str defValue = switchDefault (maybeToList(getList str)) defValue
+-- Reads value from string, returns defValue if read fails
+readDefault :: Read a => String -> a -> a
+readDefault str defValue = switchDefault (maybeToList(readMaybe str)) defValue
 
 convertStringToAction :: String -> Action
 convertStringToAction str = readDefault str Look
 
--- Получаем ввод с клавиатуры, конвертируем его в действие, вызываем обработчик, выводим результат.
+------------
+-- Main loop
+------------
 run curLoc = do
 		let locObjects = locationObjects curLoc
 		let locDescr = describeLocation curLoc

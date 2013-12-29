@@ -44,14 +44,24 @@ enumerateObjects objects = "\n  There are some objects here: " ++ show objects
 evalAction :: Action -> String
 evalAction act = "Action: " ++ show act ++ "!"
 
--- Преобразовываем строку в Action
+what' :: [Action] -> Action
+what' [] = Look
+what' (x:_) = x
+
+switchDefault :: [a] -> a -> a
+switchDefault [] def = def
+switchDefault (x:_) _ = x
+
+getList :: Read a => String -> [a]
+getList str = maybeToList(readMaybe str)
+
+--readDefault :: String -> a -> a
+--readDefault str defValue = switchDefault maybeToList(readMaybe str) defValue
+readDefault str defValue = switchDefault (getList str) defValue
+--readDefault str defValue = switchDefault (maybeToList(getList str)) defValue
+
 convertStringToAction :: String -> Action
---convertStringToAction str = read str
-convertStringToAction str = what (maybeToList(readMaybe str))
-	where what [] = Look
-	      what [x:_] = x
-	
---convertStringToAction str = fst maybeToList Maybe Quit
+convertStringToAction str = readDefault str Look
 
 -- Получаем ввод с клавиатуры, конвертируем его в действие, вызываем обработчик, выводим результат.
 run curLoc = do

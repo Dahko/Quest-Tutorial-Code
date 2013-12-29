@@ -1,6 +1,8 @@
 module Main where
 
 import Types
+import Data.Maybe
+import Text.Read
 
 describeLocation :: Location -> String
 describeLocation loc = show loc ++ "\n" ++
@@ -44,7 +46,12 @@ evalAction act = "Action: " ++ show act ++ "!"
 
 -- Преобразовываем строку в Action
 convertStringToAction :: String -> Action
-convertStringToAction str = read str
+--convertStringToAction str = read str
+convertStringToAction str = what (maybeToList(readMaybe str))
+	where what [] = Look
+	      what [x:_] = x
+	
+--convertStringToAction str = fst maybeToList Maybe Quit
 
 -- Получаем ввод с клавиатуры, конвертируем его в действие, вызываем обработчик, выводим результат.
 run curLoc = do
